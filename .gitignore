@@ -5,7 +5,6 @@ yarn.lock
 pnpm-lock.yaml
 
 # build outputs
-dist/
 build/
 .out/
 .next/
