@@ -12,7 +12,7 @@ function App() {
 
   return (
     <div style={{ padding: '2rem' }}>
-      <ConsumerPrompt onSubmit={handleSubmit} onSkip={handleSkip} />
+      <ConsumerPrompt onSubmit={handleSubmit} onSkip={handleSkip} theme="dark" />
     </div>
   );
 }
