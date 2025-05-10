@@ -2,7 +2,7 @@ import { useState } from 'react';
 import {
   CustomerPrompt,
   ToastPrompt,
-  type CustomerData,
+  type CustomerData
 } from 'tapd-react-sdk';
 
 function App() {
