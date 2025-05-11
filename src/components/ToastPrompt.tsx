@@ -19,6 +19,7 @@ type ToastPromptProps = {
 };
 
 const COLORS = {
+  black: { background: 'rgba(0, 0, 0, 0.9)', text: '#000' },
   green: { background: 'rgba(200, 255, 200, 0.9)', text: '#2e7d32' },
   blue: { background: 'rgba(200, 230, 255, 0.9)', text: '#1565c0' },
   red: { background: 'rgba(255, 200, 200, 0.9)', text: '#c62828' },
@@ -59,7 +60,8 @@ const getStyles = (
       transition: 'transform 0.4s ease-in-out',
       borderRadius: '0.75rem',
       overflow: 'hidden' as const,
-      cursor: 'pointer'
+      cursor: 'pointer',
+      boxShadow: theme === 'dark' ?  '4px 4px 12px 2px rgba(256,256,256,0.15)' : '4px 4px 12px 2px rgba(0,0,0,0.15)',
     },
     wrapperVisible: {
       transform: 'translateX(0)',
@@ -72,13 +74,13 @@ const getStyles = (
       backgroundColor: theme === 'dark' ? '#333' : '#fff',
       color: theme === 'dark' ? '#f1f1f1' : '#000',
       padding: '1.25rem',
-      boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
       maxWidth: '380px',
       width: '100%',
     },
     message: {
       marginBottom: '0.75rem',
-      fontSize: '1rem',
+      fontSize: '.9rem',
+      fontWeight: 600
     },
     button: {
       backgroundColor: BUTTON_COLORS[buttonColor] || '#000',
@@ -87,18 +89,18 @@ const getStyles = (
       border: 'none',
       borderRadius: '6px',
       cursor: 'pointer',
-      fontSize: '0.9rem',
+      fontSize: '0.8rem',
       width: '100%',
       display: 'flex',
       justifyContent: 'space-between',
-      alignItems: 'center',
+      alignItems: 'center'
     },
     ctaText: {
-      fontWeight: 500,
+      fontWeight: 600,
     },
     price: {
       fontWeight: 600,
-      fontSize: '0.9rem',
+      fontSize: '0.8rem',
       marginLeft: '0.5rem',
     },
   };
