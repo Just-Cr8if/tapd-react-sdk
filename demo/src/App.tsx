@@ -39,7 +39,7 @@ function App() {
           price="$2.99"
           sideColor="blue"
           buttonColor="black"
-          theme="light"
+          theme="dark"
           position="right"
           verticalPosition="top"
           onPress={() => console.log('Pressed toast')}
