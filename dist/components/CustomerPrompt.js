@@ -19,18 +19,18 @@ const BUTTON_COLORS = {
     white: '#fff',
 };
 const getStyles = (theme = 'light', buttonColor = 'black') => ({
-    overlay: {
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100vw',
-        height: '100vh',
-        backgroundColor: 'rgba(0,0,0,0.4)',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: 9999,
-    },
+    // overlay: {
+    //   position: 'fixed',
+    //   top: 0,
+    //   left: 0,
+    //   width: '100vw',
+    //   height: '100vh',
+    //   backgroundColor: 'rgba(0,0,0,0.4)',
+    //   display: 'flex',
+    //   justifyContent: 'center',
+    //   alignItems: 'center',
+    //   zIndex: 9999,
+    // },
     container: {
         backgroundColor: theme === 'dark' ? '#222' : '#fff',
         color: theme === 'dark' ? '#f1f1f1' : '#000',

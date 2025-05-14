@@ -8,10 +8,10 @@ export type SubmitResponse =
   | { success: true; customer_id: string }
   | { success: false; error: any };
 
-const TAPD_ENVIRONMENT = 'development';
+const TAPD_ENVIRONMENT = 'production';
 
 const TAPD_API_URL =
-  TAPD_ENVIRONMENT === 'development'
+  TAPD_ENVIRONMENT !== 'production'
     ? 'http://localhost:8000/api'
     : 'https://tapd.mobylmenu.com/api';
 
