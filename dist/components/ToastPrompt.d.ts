@@ -14,6 +14,7 @@ type ToastPromptProps = {
     verticalPosition?: VerticalPosition;
     sideColor?: SideColor;
     buttonColor?: ButtonColor;
+    iconSrc?: string | null;
 };
 declare const ToastPrompt: React.FC<ToastPromptProps>;
 export default ToastPrompt;

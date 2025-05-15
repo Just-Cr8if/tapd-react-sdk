@@ -16,7 +16,16 @@ const BUTTON_COLORS = {
     purple: '#7E57C2',
     white: '#fff',
 };
-const getStyles = (theme, position, verticalPosition, sideColor, buttonColor) => {
+const useWindowWidth = () => {
+    const [width, setWidth] = useState(window.innerWidth);
+    useEffect(() => {
+        const handleResize = () => setWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+    return width;
+};
+const getStyles = (theme, position, verticalPosition, sideColor, buttonColor, isMobile) => {
     var _a;
     const borderRadius = position === 'left'
         ? '0.75rem 0.75rem 0.75rem 0'
@@ -24,46 +33,54 @@ const getStyles = (theme, position, verticalPosition, sideColor, buttonColor) =>
     return {
         wrapper: {
             position: 'fixed',
-            [verticalPosition]: '2rem',
-            [position]: '2rem',
+            [verticalPosition]: isMobile ? '1rem' : '2rem',
+            [position]: isMobile ? '0.5rem' : '2rem',
             zIndex: 9999,
             display: 'flex',
             flexDirection: 'row',
             transform: `translateX(${position === 'left' ? '-110%' : '110%'})`,
             transition: 'transform 0.4s ease-in-out',
-            borderRadius: '0.75rem',
+            borderRadius: '0.4rem',
             overflow: 'hidden',
             cursor: 'pointer',
-            boxShadow: theme === 'dark' ? '4px 4px 12px 2px rgba(256,256,256,0.15)' : '4px 4px 12px 2px rgba(0,0,0,0.15)',
+            boxShadow: theme === 'dark'
+                ? '4px 4px 12px 2px rgba(256,256,256,0.15)'
+                : '4px 4px 12px 2px rgba(0,0,0,0.15)',
+            width: isMobile ? '90%' : '350px',
+            maxWidth: isMobile ? '90vw' : 'unset',
+            backgroundColor: theme === 'dark' ? 'rgb(51, 51, 51)' : 'white',
         },
         wrapperVisible: {
             transform: 'translateX(0)',
         },
         sideBar: {
-            width: '20px',
+            width: '10px',
             backgroundColor: ((_a = COLORS[sideColor]) === null || _a === void 0 ? void 0 : _a.text) || COLORS.blue.text,
         },
         container: {
+            position: 'relative',
             backgroundColor: theme === 'dark' ? '#333' : '#fff',
             color: theme === 'dark' ? '#f1f1f1' : '#000',
-            padding: '1.25rem',
+            padding: '1rem 1.25rem',
             maxWidth: '380px',
             width: '100%',
+            // border: `1px solid ${COLORS.blue.text}`,
         },
         message: {
             marginBottom: '0.75rem',
             fontSize: '.9rem',
-            fontWeight: 600
+            fontWeight: 500
         },
         button: {
             backgroundColor: BUTTON_COLORS[buttonColor] || '#000',
             color: buttonColor === 'white' ? '#000' : '#fff',
-            padding: '0.5rem',
+            padding: '0.5rem 0.75rem',
             border: 'none',
             borderRadius: '6px',
             cursor: 'pointer',
             fontSize: '0.8rem',
-            width: '100%',
+            width: 'auto',
+            maxWidth: '65%',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center'
@@ -76,15 +93,37 @@ const getStyles = (theme, position, verticalPosition, sideColor, buttonColor) =>
             fontSize: '0.8rem',
             marginLeft: '0.5rem',
         },
+        closeIcon: {
+            position: 'absolute',
+            top: '0.5rem',
+            right: '0.5rem',
+            width: '16px',
+            height: '16px',
+            cursor: 'pointer',
+            opacity: 0.6,
+        },
+        icon: {
+            width: '48px',
+            height: '48px',
+            margin: 'auto 0 auto 1rem',
+            backgroundColor: theme === 'dark' ? 'rgb(51, 51, 51)' : 'white',
+        },
     };
 };
-const ToastPrompt = ({ message, ctaText, price, onPress, theme = 'light', position = 'right', verticalPosition = 'bottom', sideColor = 'blue', buttonColor = 'black', }) => {
+const ToastPrompt = ({ message, ctaText, price, onPress, theme = 'light', position = 'right', verticalPosition = 'bottom', sideColor = 'blue', buttonColor = 'black', iconSrc, }) => {
     const [visible, setVisible] = useState(false);
     useEffect(() => {
         const timeout = setTimeout(() => setVisible(true), 100);
         return () => clearTimeout(timeout);
     }, []);
-    const styles = getStyles(theme, position, verticalPosition, sideColor, buttonColor);
-    return (_jsxs("div", { style: Object.assign(Object.assign({}, styles.wrapper), (visible ? styles.wrapperVisible : {})), onClick: onPress, children: [_jsx("div", { style: styles.sideBar }), _jsxs("div", { style: styles.container, children: [_jsx("div", { style: styles.message, children: message }), _jsxs("button", { style: styles.button, children: [_jsx("span", { style: styles.ctaText, children: ctaText }), _jsx("span", { style: styles.price, children: price })] })] })] }));
+    const handleClose = (e) => {
+        e.stopPropagation();
+        setVisible(false);
+    };
+    const width = useWindowWidth();
+    const isMobile = width < 480;
+    const styles = getStyles(theme, position, verticalPosition, sideColor, buttonColor, isMobile);
+    return (_jsxs("div", { style: Object.assign(Object.assign({}, styles.wrapper), (visible ? styles.wrapperVisible : {})), onClick: onPress, children: [_jsx("div", { style: styles.sideBar }), iconSrc !== null && (_jsx("img", { src: iconSrc ||
+                    (theme === 'dark' ? 'chef-hat-dark.png' : 'chef-hat.png'), alt: "Icon", style: styles.icon })), _jsxs("div", { style: styles.container, children: [_jsx("img", { src: "/close-x-grey.png", alt: "Close", style: styles.closeIcon, onClick: handleClose }), _jsx("div", { style: styles.message, children: message }), _jsxs("button", { style: styles.button, children: [_jsx("span", { style: styles.ctaText, children: ctaText }), _jsx("span", { style: styles.price, children: price })] })] })] }));
 };
 export default ToastPrompt;

@@ -27,18 +27,18 @@ const BUTTON_COLORS: Record<ButtonColor, string> = {
 };
 
 const getStyles = (theme: Theme = 'light', buttonColor: ButtonColor = 'black'): { [key: string]: React.CSSProperties } => ({
-  overlay: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100vw',
-    height: '100vh',
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 9999,
-  },
+  // overlay: {
+  //   position: 'fixed',
+  //   top: 0,
+  //   left: 0,
+  //   width: '100vw',
+  //   height: '100vh',
+  //   backgroundColor: 'rgba(0,0,0,0.4)',
+  //   display: 'flex',
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   zIndex: 9999,
+  // },
   container: {
     backgroundColor: theme === 'dark' ? '#222' : '#fff',
     color: theme === 'dark' ? '#f1f1f1' : '#000',
