@@ -24,7 +24,7 @@ function App() {
         <CustomerPrompt
           venueId="your-venue-id"
           apiKey="your-api-key"
-          theme="dark"
+          theme="light"
           onSubmit={handleSubmit}
           onSkip={handleSkip}
         />
@@ -34,7 +34,7 @@ function App() {
     if (activeComponent === 'toast') {
       return (
         <ToastPrompt
-          message="Want fries with that?"
+          message="How about some extra fries?"
           ctaText="Add Fries"
           price="$2.99"
           sideColor="blue"
