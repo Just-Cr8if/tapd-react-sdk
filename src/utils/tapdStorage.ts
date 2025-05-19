@@ -155,7 +155,7 @@ async function submitCustomerSkip({
     const responseBody = await res.json().catch(() => null);
 
     if (!res.ok || !responseBody?.customer_id) {
-      console.error('❌ Skip submission failed:', res.status, responseBody);
+      console.error('Skip submission failed:', res.status, responseBody);
       return { success: false, error: responseBody };
     }
 

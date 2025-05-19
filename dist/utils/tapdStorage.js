@@ -123,7 +123,7 @@ function submitCustomerSkip(_a) {
             });
             const responseBody = yield res.json().catch(() => null);
             if (!res.ok || !(responseBody === null || responseBody === void 0 ? void 0 : responseBody.customer_id)) {
-                console.error('❌ Skip submission failed:', res.status, responseBody);
+                console.error('Skip submission failed:', res.status, responseBody);
                 return { success: false, error: responseBody };
             }
             markPromptSeen(venueId);
