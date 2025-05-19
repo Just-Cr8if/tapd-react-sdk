@@ -124,6 +124,8 @@ const ToastPrompt = ({ message, ctaText, price, onPress, theme = 'light', positi
     const isMobile = width < 480;
     const styles = getStyles(theme, position, verticalPosition, sideColor, buttonColor, isMobile);
     return (_jsxs("div", { style: Object.assign(Object.assign({}, styles.wrapper), (visible ? styles.wrapperVisible : {})), onClick: onPress, children: [_jsx("div", { style: styles.sideBar }), iconSrc !== null && (_jsx("img", { src: iconSrc ||
-                    (theme === 'dark' ? 'chef-hat-dark.png' : 'chef-hat.png'), alt: "Icon", style: styles.icon })), _jsxs("div", { style: styles.container, children: [_jsx("img", { src: "/close-x-grey.png", alt: "Close", style: styles.closeIcon, onClick: handleClose }), _jsx("div", { style: styles.message, children: message }), _jsxs("button", { style: styles.button, children: [_jsx("span", { style: styles.ctaText, children: ctaText }), _jsx("span", { style: styles.price, children: price })] })] })] }));
+                    (theme === 'dark'
+                        ? 'https://mobyl-menu-bucket.s3.us-east-1.amazonaws.com/tapd_react_web/chef-hat-dark.png'
+                        : 'https://mobyl-menu-bucket.s3.us-east-1.amazonaws.com/tapd_react_web/chef-hat.png'), alt: "Icon", style: styles.icon })), _jsxs("div", { style: styles.container, children: [_jsx("img", { src: "https://mobyl-menu-bucket.s3.us-east-1.amazonaws.com/tapd_react_web/close-x-grey.png", alt: "Close", style: styles.closeIcon, onClick: handleClose }), _jsx("div", { style: styles.message, children: message }), _jsxs("button", { style: styles.button, children: [_jsx("span", { style: styles.ctaText, children: ctaText }), _jsx("span", { style: styles.price, children: price })] })] })] }));
 };
 export default ToastPrompt;

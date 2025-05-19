@@ -2,6 +2,7 @@ export type CustomerData = {
     name?: string;
     phone_number?: string;
     email?: string;
+    lookup_only?: boolean;
 };
 export type SubmitResponse = {
     success: true;

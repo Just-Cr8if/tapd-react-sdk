@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   submitCustomerData,
   submitCustomerSkip,
@@ -15,6 +15,7 @@ type CustomerPromptProps = {
   buttonColor?: ButtonColor;
   onSubmit?: (data: CustomerData) => void;
   onSkip?: () => void;
+  isVisible?: boolean;
 };
 
 const BUTTON_COLORS: Record<ButtonColor, string> = {
@@ -27,18 +28,18 @@ const BUTTON_COLORS: Record<ButtonColor, string> = {
 };
 
 const getStyles = (theme: Theme = 'light', buttonColor: ButtonColor = 'black'): { [key: string]: React.CSSProperties } => ({
-  // overlay: {
-  //   position: 'fixed',
-  //   top: 0,
-  //   left: 0,
-  //   width: '100vw',
-  //   height: '100vh',
-  //   backgroundColor: 'rgba(0,0,0,0.4)',
-  //   display: 'flex',
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  //   zIndex: 9999,
-  // },
+  overlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100vw',
+    height: '100vh',
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 9999,
+  },
   container: {
     backgroundColor: theme === 'dark' ? '#222' : '#fff',
     color: theme === 'dark' ? '#f1f1f1' : '#000',
@@ -87,6 +88,15 @@ const getStyles = (theme: Theme = 'light', buttonColor: ButtonColor = 'black'): 
     cursor: 'pointer',
     textDecoration: 'underline',
   },
+  toggleLink: {
+    marginTop: '0.5rem',
+    fontSize: '0.85rem',
+    color: theme === 'dark' ? '#aaa' : '#666',
+    background: 'none',
+    border: 'none',
+    cursor: 'pointer',
+    textDecoration: 'underline',
+  },
 });
 
 const CustomerPrompt: React.FC<CustomerPromptProps> = ({
@@ -96,56 +106,111 @@ const CustomerPrompt: React.FC<CustomerPromptProps> = ({
   onSkip,
   theme = 'light',
   buttonColor = 'black',
+  isVisible = true,
 }) => {
+  const [visible, setVisible] = useState(isVisible);
+  const [mode, setMode] = useState<'lookup' | 'full'>('lookup');
   const styles = getStyles(theme, buttonColor);
 
   useEffect(() => {
+    setVisible(isVisible);
+  }, [isVisible]);
+
+  useEffect(() => {
     const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    if (visible) {
+      document.body.style.overflow = 'hidden';
+    }
     return () => {
       document.body.style.overflow = originalOverflow;
     };
-  }, []);
+  }, [visible]);
+
+  if (!visible) return null;
 
   return (
     <div style={styles.overlay}>
       <div style={styles.container}>
         <h2 style={styles.title}>Join the club</h2>
         <p style={styles.description}>
-          Enter your info to unlock rewards and track your visits.
+          {mode === 'lookup'
+            ? 'Enter your phone or email to find your account.'
+            : 'Enter your info to unlock rewards and track your visits.'}
         </p>
         <form
           onSubmit={async (e) => {
             e.preventDefault();
             const form = e.target as HTMLFormElement;
             const formData = new FormData(form);
-            const data: CustomerData = {
-              name: formData.get('name')?.toString() || undefined,
-              phone_number: formData.get('phone_number')?.toString() || undefined,
-              email: formData.get('email')?.toString() || undefined,
-            };
+
+            let data: CustomerData;
+
+            if (mode === 'lookup') {
+              const contact = formData.get('contact')?.toString().trim();
+              if (!contact) return;
+
+              data = contact.includes('@')
+                ? { email: contact, lookup_only: true }
+                : { phone_number: contact, lookup_only: true };
+            } else {
+              data = {
+                name: formData.get('name')?.toString() || undefined,
+                phone_number: formData.get('phone_number')?.toString() || undefined,
+                email: formData.get('email')?.toString() || undefined,
+              };
+            }
 
             const result = await submitCustomerData({ apiKey, venueId, data });
 
-            if (result.success && onSubmit) {
-              onSubmit(data);
-            } else if (!result.success) {
+            if (result.success) {
+              setVisible(false);
+              onSubmit?.(data);
+            } else {
               console.error('Failed to submit customer data:', result.error);
             }
           }}
           style={styles.form}
         >
-          <input name="name" placeholder="Name (optional)" style={styles.input} />
-          <input name="phone_number" placeholder="Phone Number" type="tel" style={styles.input} />
-          <input name="email" placeholder="Email" type="email" style={styles.input} />
-          <button type="submit" style={styles.button}>Join</button>
+          {mode === 'lookup' ? (
+            <>
+              <input
+                name="contact"
+                placeholder="Phone or Email"
+                style={styles.input}
+                autoComplete="on"
+              />
+              <button type="submit" style={styles.button}>Continue</button>
+              <button
+                type="button"
+                style={styles.toggleLink}
+                onClick={() => setMode('full')}
+              >
+                Don’t have an account?
+              </button>
+            </>
+          ) : (
+            <>
+              <input name="name" placeholder="Name (optional)" style={styles.input} />
+              <input name="phone_number" placeholder="Phone Number" type="tel" style={styles.input} />
+              <input name="email" placeholder="Email" type="email" style={styles.input} />
+              <button type="submit" style={styles.button}>Join</button>
+              <button
+                type="button"
+                style={styles.toggleLink}
+                onClick={() => setMode('lookup')}
+              >
+                Back to login
+              </button>
+            </>
+          )}
           <button
             type="button"
             onClick={async () => {
+              setVisible(false);
               const result = await submitCustomerSkip({ apiKey, venueId });
-              if (result.success && onSkip) {
-                onSkip();
-              } else if (!result.success) {
+              if (result.success) {
+                onSkip?.();
+              } else {
                 console.error('Failed to skip prompt:', result.error);
               }
             }}

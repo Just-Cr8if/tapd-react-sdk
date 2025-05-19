@@ -7,8 +7,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { useEffect } from 'react';
+import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
+import { useEffect, useState } from 'react';
 import { submitCustomerData, submitCustomerSkip, } from '../utils/tapdStorage';
 const BUTTON_COLORS = {
     black: '#000',
@@ -19,18 +19,18 @@ const BUTTON_COLORS = {
     white: '#fff',
 };
 const getStyles = (theme = 'light', buttonColor = 'black') => ({
-    // overlay: {
-    //   position: 'fixed',
-    //   top: 0,
-    //   left: 0,
-    //   width: '100vw',
-    //   height: '100vh',
-    //   backgroundColor: 'rgba(0,0,0,0.4)',
-    //   display: 'flex',
-    //   justifyContent: 'center',
-    //   alignItems: 'center',
-    //   zIndex: 9999,
-    // },
+    overlay: {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        backgroundColor: 'rgba(0,0,0,0.4)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 9999,
+    },
     container: {
         backgroundColor: theme === 'dark' ? '#222' : '#fff',
         color: theme === 'dark' ? '#f1f1f1' : '#000',
@@ -79,39 +79,72 @@ const getStyles = (theme = 'light', buttonColor = 'black') => ({
         cursor: 'pointer',
         textDecoration: 'underline',
     },
+    toggleLink: {
+        marginTop: '0.5rem',
+        fontSize: '0.85rem',
+        color: theme === 'dark' ? '#aaa' : '#666',
+        background: 'none',
+        border: 'none',
+        cursor: 'pointer',
+        textDecoration: 'underline',
+    },
 });
-const CustomerPrompt = ({ venueId, apiKey, onSubmit, onSkip, theme = 'light', buttonColor = 'black', }) => {
+const CustomerPrompt = ({ venueId, apiKey, onSubmit, onSkip, theme = 'light', buttonColor = 'black', isVisible = true, }) => {
+    const [visible, setVisible] = useState(isVisible);
+    const [mode, setMode] = useState('lookup');
     const styles = getStyles(theme, buttonColor);
     useEffect(() => {
+        setVisible(isVisible);
+    }, [isVisible]);
+    useEffect(() => {
         const originalOverflow = document.body.style.overflow;
-        document.body.style.overflow = 'hidden';
+        if (visible) {
+            document.body.style.overflow = 'hidden';
+        }
         return () => {
             document.body.style.overflow = originalOverflow;
         };
-    }, []);
-    return (_jsx("div", { style: styles.overlay, children: _jsxs("div", { style: styles.container, children: [_jsx("h2", { style: styles.title, children: "Join the club" }), _jsx("p", { style: styles.description, children: "Enter your info to unlock rewards and track your visits." }), _jsxs("form", { onSubmit: (e) => __awaiter(void 0, void 0, void 0, function* () {
-                        var _a, _b, _c;
+    }, [visible]);
+    if (!visible)
+        return null;
+    return (_jsx("div", { style: styles.overlay, children: _jsxs("div", { style: styles.container, children: [_jsx("h2", { style: styles.title, children: "Join the club" }), _jsx("p", { style: styles.description, children: mode === 'lookup'
+                        ? 'Enter your phone or email to find your account.'
+                        : 'Enter your info to unlock rewards and track your visits.' }), _jsxs("form", { onSubmit: (e) => __awaiter(void 0, void 0, void 0, function* () {
+                        var _a, _b, _c, _d;
                         e.preventDefault();
                         const form = e.target;
                         const formData = new FormData(form);
-                        const data = {
-                            name: ((_a = formData.get('name')) === null || _a === void 0 ? void 0 : _a.toString()) || undefined,
-                            phone_number: ((_b = formData.get('phone_number')) === null || _b === void 0 ? void 0 : _b.toString()) || undefined,
-                            email: ((_c = formData.get('email')) === null || _c === void 0 ? void 0 : _c.toString()) || undefined,
-                        };
-                        const result = yield submitCustomerData({ apiKey, venueId, data });
-                        if (result.success && onSubmit) {
-                            onSubmit(data);
+                        let data;
+                        if (mode === 'lookup') {
+                            const contact = (_a = formData.get('contact')) === null || _a === void 0 ? void 0 : _a.toString().trim();
+                            if (!contact)
+                                return;
+                            data = contact.includes('@')
+                                ? { email: contact, lookup_only: true }
+                                : { phone_number: contact, lookup_only: true };
                         }
-                        else if (!result.success) {
+                        else {
+                            data = {
+                                name: ((_b = formData.get('name')) === null || _b === void 0 ? void 0 : _b.toString()) || undefined,
+                                phone_number: ((_c = formData.get('phone_number')) === null || _c === void 0 ? void 0 : _c.toString()) || undefined,
+                                email: ((_d = formData.get('email')) === null || _d === void 0 ? void 0 : _d.toString()) || undefined,
+                            };
+                        }
+                        const result = yield submitCustomerData({ apiKey, venueId, data });
+                        if (result.success) {
+                            setVisible(false);
+                            onSubmit === null || onSubmit === void 0 ? void 0 : onSubmit(data);
+                        }
+                        else {
                             console.error('Failed to submit customer data:', result.error);
                         }
-                    }), style: styles.form, children: [_jsx("input", { name: "name", placeholder: "Name (optional)", style: styles.input }), _jsx("input", { name: "phone_number", placeholder: "Phone Number", type: "tel", style: styles.input }), _jsx("input", { name: "email", placeholder: "Email", type: "email", style: styles.input }), _jsx("button", { type: "submit", style: styles.button, children: "Join" }), _jsx("button", { type: "button", onClick: () => __awaiter(void 0, void 0, void 0, function* () {
+                    }), style: styles.form, children: [mode === 'lookup' ? (_jsxs(_Fragment, { children: [_jsx("input", { name: "contact", placeholder: "Phone or Email", style: styles.input, autoComplete: "on" }), _jsx("button", { type: "submit", style: styles.button, children: "Continue" }), _jsx("button", { type: "button", style: styles.toggleLink, onClick: () => setMode('full'), children: "Don\u2019t have an account?" })] })) : (_jsxs(_Fragment, { children: [_jsx("input", { name: "name", placeholder: "Name (optional)", style: styles.input }), _jsx("input", { name: "phone_number", placeholder: "Phone Number", type: "tel", style: styles.input }), _jsx("input", { name: "email", placeholder: "Email", type: "email", style: styles.input }), _jsx("button", { type: "submit", style: styles.button, children: "Join" }), _jsx("button", { type: "button", style: styles.toggleLink, onClick: () => setMode('lookup'), children: "Back to login" })] })), _jsx("button", { type: "button", onClick: () => __awaiter(void 0, void 0, void 0, function* () {
+                                setVisible(false);
                                 const result = yield submitCustomerSkip({ apiKey, venueId });
-                                if (result.success && onSkip) {
-                                    onSkip();
+                                if (result.success) {
+                                    onSkip === null || onSkip === void 0 ? void 0 : onSkip();
                                 }
-                                else if (!result.success) {
+                                else {
                                     console.error('Failed to skip prompt:', result.error);
                                 }
                             }), style: styles.skipButton, children: "No thanks" })] })] }) }));

@@ -2,6 +2,7 @@ export type CustomerData = {
   name?: string;
   phone_number?: string;
   email?: string;
+  lookup_only?: boolean;
 };
 
 export type SubmitResponse =
@@ -11,9 +12,9 @@ export type SubmitResponse =
 const TAPD_ENVIRONMENT = 'production';
 
 const TAPD_API_URL =
-  TAPD_ENVIRONMENT !== 'production'
-    ? 'http://localhost:8000/api'
-    : 'https://tapd.mobylmenu.com/api';
+  TAPD_ENVIRONMENT === 'production'
+    ? 'https://tapd.mobylmenu.com/api'
+    : 'http://localhost:8000/api';
 
 const KEY_PREFIX = 'tapd_seen_prompt_for_venue';
 const TAPD_CUSTOMER_ID_KEY = 'tapd_customer_id';

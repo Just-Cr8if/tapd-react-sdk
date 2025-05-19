@@ -191,15 +191,18 @@ const ToastPrompt: React.FC<ToastPromptProps> = ({
         <img
           src={
             iconSrc ||
-            (theme === 'dark' ? 'chef-hat-dark.png' : 'chef-hat.png')
+            (theme === 'dark'
+              ? 'https://mobyl-menu-bucket.s3.us-east-1.amazonaws.com/tapd_react_web/chef-hat-dark.png'
+              : 'https://mobyl-menu-bucket.s3.us-east-1.amazonaws.com/tapd_react_web/chef-hat.png')
           }
           alt="Icon"
           style={styles.icon}
         />
+
       )}
       <div style={styles.container}>
         <img
-          src="/close-x-grey.png"
+          src="https://mobyl-menu-bucket.s3.us-east-1.amazonaws.com/tapd_react_web/close-x-grey.png"
           alt="Close"
           style={styles.closeIcon}
           onClick={handleClose}

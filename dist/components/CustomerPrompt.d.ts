@@ -9,6 +9,7 @@ type CustomerPromptProps = {
     buttonColor?: ButtonColor;
     onSubmit?: (data: CustomerData) => void;
     onSkip?: () => void;
+    isVisible?: boolean;
 };
 declare const CustomerPrompt: React.FC<CustomerPromptProps>;
 export default CustomerPrompt;

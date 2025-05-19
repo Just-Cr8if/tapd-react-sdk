@@ -22,11 +22,12 @@ function App() {
     if (activeComponent === 'customer') {
       return (
         <CustomerPrompt
-          venueId="your-venue-id"
-          apiKey="your-api-key"
+          venueId="f7a2eaba-006a-45b2-8a98-e68f2c98f57f"
+          apiKey="f7a2eaba-006a-45b2-8a98-e68f2c98f57f"
           theme="light"
           onSubmit={handleSubmit}
           onSkip={handleSkip}
+          isVisible={activeComponent === 'customer'}
         />
       );
     }
@@ -36,10 +37,9 @@ function App() {
         <ToastPrompt
           message="How about some extra fries?"
           ctaText="Add Fries"
-          price="$2.99"
+          price=""
           sideColor="blue"
           buttonColor="black"
-          theme="dark"
           position="right"
           verticalPosition="top"
           onPress={() => console.log('Pressed toast')}
@@ -52,7 +52,6 @@ function App() {
 
   return (
     <div style={{ backgroundColor: 'white', height: '100vh', width: '100vw' }}>
-      {/* Buttons always visible */}
       <div style={{ zIndex: 1, position: 'relative', marginBottom: '2rem' }}>
         <button onClick={() => setActiveComponent('customer')} style={{ marginRight: '1rem' }}>
           Show CustomerPrompt
