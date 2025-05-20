@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 const TAPD_ENVIRONMENT = 'production';
-const TAPD_API_URL = TAPD_ENVIRONMENT === 'production'
+const TAPD_API_URL = TAPD_ENVIRONMENT !== 'production'
     ? 'https://tapd.mobylmenu.com/api'
     : 'http://localhost:8000/api';
 const KEY_PREFIX = 'tapd_seen_prompt_for_venue';

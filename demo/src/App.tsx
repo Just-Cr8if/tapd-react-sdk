@@ -28,6 +28,7 @@ function App() {
           onSubmit={handleSubmit}
           onSkip={handleSkip}
           isVisible={activeComponent === 'customer'}
+          animation="bounce"
         />
       );
     }
