@@ -191,20 +191,21 @@ const CustomerPrompt: React.FC<CustomerPromptProps> = ({
             const form = e.target as HTMLFormElement;
             const formData = new FormData(form);
 
-            let data: CustomerData;
+            let data: CustomerData & { type: 'login' | 'register' };
 
             if (mode === 'lookup') {
               const contact = formData.get('contact')?.toString().trim();
               if (!contact) return;
 
               data = contact.includes('@')
-                ? { email: contact, lookup_only: true }
-                : { phone_number: contact, lookup_only: true };
+                ? { email: contact, lookup_only: true, type: 'login' }
+                : { phone_number: contact, lookup_only: true, type: 'login' };
             } else {
               data = {
                 name: formData.get('name')?.toString() || undefined,
                 phone_number: formData.get('phone_number')?.toString() || undefined,
                 email: formData.get('email')?.toString() || undefined,
+                type: 'register',
               };
             }
 
