@@ -146,14 +146,15 @@ const CustomerPrompt = ({ venueId, apiKey, onSubmit, onSkip, theme = 'light', bu
                             if (!contact)
                                 return;
                             data = contact.includes('@')
-                                ? { email: contact, lookup_only: true }
-                                : { phone_number: contact, lookup_only: true };
+                                ? { email: contact, lookup_only: true, type: 'login' }
+                                : { phone_number: contact, lookup_only: true, type: 'login' };
                         }
                         else {
                             data = {
                                 name: ((_b = formData.get('name')) === null || _b === void 0 ? void 0 : _b.toString()) || undefined,
                                 phone_number: ((_c = formData.get('phone_number')) === null || _c === void 0 ? void 0 : _c.toString()) || undefined,
                                 email: ((_d = formData.get('email')) === null || _d === void 0 ? void 0 : _d.toString()) || undefined,
+                                type: 'register',
                             };
                         }
                         const result = yield submitCustomerData({ apiKey, venueId, data });
