@@ -9,12 +9,7 @@ export type SubmitResponse =
   | { success: true; customer_id: string }
   | { success: false; error: any };
 
-const TAPD_ENVIRONMENT = 'production';
-
-const TAPD_API_URL =
-  TAPD_ENVIRONMENT !== 'production'
-    ? 'https://tapd.mobylmenu.com/api'
-    : 'http://localhost:8000/api';
+const TAPD_API_URL = 'http://localhost:8000/api';
 
 const KEY_PREFIX = 'tapd_seen_prompt_for_venue';
 const TAPD_CUSTOMER_ID_KEY = 'tapd_customer_id';
