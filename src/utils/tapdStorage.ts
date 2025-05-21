@@ -12,7 +12,7 @@ export type SubmitResponse =
 const TAPD_ENVIRONMENT = 'production';
 
 const TAPD_API_URL =
-  TAPD_ENVIRONMENT === 'production'
+  TAPD_ENVIRONMENT !== 'production'
     ? 'https://tapd.mobylmenu.com/api'
     : 'http://localhost:8000/api';
 
