@@ -84,6 +84,8 @@ function submitCustomerData(_a) {
             name: data.name || null,
             phone_number: data.phone_number || null,
             email: data.email || null,
+            type: data.type,
+            skipped: data.skipped || false
         };
         try {
             const res = yield fetch(`${TAPD_API_URL}/customer-entry/submit`, {
