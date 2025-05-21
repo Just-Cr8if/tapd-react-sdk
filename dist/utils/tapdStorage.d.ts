@@ -11,7 +11,7 @@ export type SubmitResponse = {
     success: false;
     error: any;
 };
-declare const TAPD_API_URL: string;
+declare const TAPD_API_URL = "http://localhost:8000/api";
 declare function markPromptSeen(venueId: string): void;
 declare function hasSeenPrompt(venueId: string): boolean;
 declare function clearPromptSeen(venueId: string): void;

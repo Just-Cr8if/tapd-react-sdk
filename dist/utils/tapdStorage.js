@@ -7,7 +7,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-
 const TAPD_API_URL = 'http://localhost:8000/api';
 const KEY_PREFIX = 'tapd_seen_prompt_for_venue';
 const TAPD_CUSTOMER_ID_KEY = 'tapd_customer_id';
@@ -85,6 +84,7 @@ function submitCustomerData(_a) {
             name: data.name || null,
             phone_number: data.phone_number || null,
             email: data.email || null,
+            type: data.type,
         };
         try {
             const res = yield fetch(`${TAPD_API_URL}/customer-entry/submit`, {
