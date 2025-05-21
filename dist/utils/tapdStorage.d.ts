@@ -3,6 +3,8 @@ export type CustomerData = {
     phone_number?: string;
     email?: string;
     lookup_only?: boolean;
+    type?: 'login' | 'register';
+    skipped?: boolean;
 };
 export type SubmitResponse = {
     success: true;
